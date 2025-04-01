@@ -3,6 +3,8 @@ package com.example.emtlab1a.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 public class Book {
@@ -14,15 +16,15 @@ public class Book {
     private BookCategory category;
     @ManyToOne
     private Author author;
-    private Integer availableCopies;
+    @OneToMany(mappedBy = "book")
+    private List<BookCopy> bookCopy;
 
     public Book() {
     }
 
-    public Book(String name, BookCategory category, Author author, Integer availableCopies) {
+    public Book(String name, BookCategory category, Author author) {
         this.name = name;
         this.category = category;
         this.author = author;
-        this.availableCopies = availableCopies;
     }
 }

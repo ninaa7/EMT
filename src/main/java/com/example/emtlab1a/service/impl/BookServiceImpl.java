@@ -1,6 +1,7 @@
 package com.example.emtlab1a.service.impl;
 
 import com.example.emtlab1a.model.Book;
+import com.example.emtlab1a.model.BookCopy;
 import com.example.emtlab1a.model.dto.BookDto;
 import com.example.emtlab1a.repository.BookRepository;
 import com.example.emtlab1a.service.AuthorService;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -36,10 +38,10 @@ public class BookServiceImpl implements BookService {
         if(book.getName() !=null &&
                 authorService.findById(book.getAuthor()).isPresent() &&
                 book.getCategory() !=null &&
-                book.getAvailableCopies() !=null
+                book.getBookCopies() !=null
         ){
             return Optional.of(
-                    bookRepository.save(new Book(book.getName(),book.getCategory(),authorService.findById(book.getAuthor()).get(),book.getAvailableCopies()))
+                    bookRepository.save(new Book(book.getName(),book.getCategory(),authorService.findById(book.getAuthor()).get()))
             );
         }
         return Optional.empty();
@@ -55,9 +57,9 @@ public class BookServiceImpl implements BookService {
         if (bookDto.getCategory() != null) {
             book.setCategory(bookDto.getCategory());
         }
-        if (bookDto.getAvailableCopies() != null) {
-            book.setAvailableCopies(bookDto.getAvailableCopies());
-        }
+//        if (bookDto.getBookCopies() != null) {
+//            book.setBookCopies(bookDto.getBookCopies());
+//        }
         if (bookDto.getName() != null) {
             book.setName(bookDto.getName());
         }
@@ -73,8 +75,11 @@ public class BookServiceImpl implements BookService {
     public Optional<Book> markAsRented(Long id) {
         return bookRepository.findById(id)
                 .map(existingBook -> {
-                    if (existingBook.getAvailableCopies() > 0) {
-                        existingBook.setAvailableCopies(existingBook.getAvailableCopies() - 1);
+                    for (BookCopy copy : existingBook.getBookCopy()) {
+                        if (copy.getIsRented()) {
+                            copy.setIsRented(false);
+                            break;
+                        }
                     }
                     return bookRepository.save(existingBook);
                 });
