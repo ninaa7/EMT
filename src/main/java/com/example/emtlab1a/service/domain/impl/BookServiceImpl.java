@@ -1,16 +1,15 @@
-package com.example.emtlab1a.service.impl;
+package com.example.emtlab1a.service.domain.impl;
 
-import com.example.emtlab1a.model.Book;
-import com.example.emtlab1a.model.BookCopy;
-import com.example.emtlab1a.model.dto.BookDto;
+import com.example.emtlab1a.model.domain.Book;
+import com.example.emtlab1a.model.domain.BookCopy;
+import com.example.emtlab1a.dto.BookDto;
 import com.example.emtlab1a.repository.BookRepository;
-import com.example.emtlab1a.service.AuthorService;
-import com.example.emtlab1a.service.BookService;
+import com.example.emtlab1a.service.domain.AuthorService;
+import com.example.emtlab1a.service.domain.BookService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -34,14 +33,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> save(BookDto book) {
+    public Optional<Book> save(Book book) {
         if(book.getName() !=null &&
-                authorService.findById(book.getAuthor()).isPresent() &&
-                book.getCategory() !=null &&
-                book.getBookCopies() !=null
+                authorService.findById(book.getAuthor().getId()).isPresent() &&
+                book.getCategory() !=null
         ){
             return Optional.of(
-                    bookRepository.save(new Book(book.getName(),book.getCategory(),authorService.findById(book.getAuthor()).get()))
+                    bookRepository.save(new Book(book.getName(),book.getCategory(),authorService.findById(book.getAuthor().getId()).get()))
             );
         }
         return Optional.empty();
@@ -49,10 +47,10 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public Optional<Book> update(Long id, BookDto bookDto) {
+    public Optional<Book> update(Long id, Book bookDto) {
         Book book = this.findById(id).get();
         if (bookDto.getAuthor() != null) {
-            book.setAuthor(authorService.findById(bookDto.getAuthor()).get());
+            book.setAuthor(authorService.findById(bookDto.getAuthor().getId()).get());
         }
         if (bookDto.getCategory() != null) {
             book.setCategory(bookDto.getCategory());
@@ -71,17 +69,4 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-    @Override
-    public Optional<Book> markAsRented(Long id) {
-        return bookRepository.findById(id)
-                .map(existingBook -> {
-                    for (BookCopy copy : existingBook.getBookCopy()) {
-                        if (copy.getIsRented()) {
-                            copy.setIsRented(false);
-                            break;
-                        }
-                    }
-                    return bookRepository.save(existingBook);
-                });
-    }
 }

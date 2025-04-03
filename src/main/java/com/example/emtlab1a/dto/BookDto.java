@@ -1,7 +1,6 @@
-package com.example.emtlab1a.model.dto;
+package com.example.emtlab1a.dto;
 
-import com.example.emtlab1a.model.Author;
-import com.example.emtlab1a.model.BookCategory;
+import com.example.emtlab1a.model.enumerations.BookCategory;
 import lombok.Data;
 
 @Data

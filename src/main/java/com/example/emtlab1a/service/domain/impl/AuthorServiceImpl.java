@@ -1,8 +1,8 @@
-package com.example.emtlab1a.service.impl;
+package com.example.emtlab1a.service.domain.impl;
 
-import com.example.emtlab1a.model.Author;
+import com.example.emtlab1a.model.domain.Author;
 import com.example.emtlab1a.repository.AuthorRepository;
-import com.example.emtlab1a.service.AuthorService;
+import com.example.emtlab1a.service.domain.AuthorService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,5 +1,6 @@
-package com.example.emtlab1a.model;
+package com.example.emtlab1a.model.domain;
 
+import com.example.emtlab1a.model.domain.Book;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,9 +19,14 @@ public class BookCopy {
 
     public BookCopy() {
     }
+    public BookCopy(Book book) {
+        this.book = book;
+        this.isRented = false;
+        state = " ";
+    }
 
     public BookCopy(Boolean isRented, String state, Book book) {
-        this.isRented = true;
+        this.isRented = false;
         this.state = state;
         this.book=book;
     }

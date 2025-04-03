@@ -1,6 +1,6 @@
-package com.example.emtlab1a.service;
+package com.example.emtlab1a.service.domain;
 
-import com.example.emtlab1a.model.Author;
+import com.example.emtlab1a.model.domain.Author;
 
 import java.util.List;
 import java.util.Optional;

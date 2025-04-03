@@ -1,5 +1,6 @@
-package com.example.emtlab1a.model;
+package com.example.emtlab1a.model.domain;
 
+import com.example.emtlab1a.model.enumerations.BookCategory;
 import jakarta.persistence.*;
 import lombok.Data;
 
